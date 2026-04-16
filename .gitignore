@@ -39,7 +39,7 @@ exercises/*/*
 !exercises/*/Makefile
 tests/test_*
 !tests/test_*.c
-!test_20_mybash.sh
+!tests/test_20_mybash.sh
 
 
 # 测试结果
