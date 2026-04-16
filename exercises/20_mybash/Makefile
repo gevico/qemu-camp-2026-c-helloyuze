@@ -7,6 +7,9 @@
 # =============================================
 
 PWD := $(shell pwd)
+# 输出目录
+OBJDIR := $(PWD)/obj
+BINDIR := $(PWD)/bin
 
 # 所有子模块目录（静态库：生成 .a）
 SUBDIRS := \
@@ -20,17 +23,14 @@ all: mybash
 
 # 通用规则：构建每个子模块（静态库）
 $(SUBDIRS):
-    # TODO: 在这里添加你的代码
-    # I AM NOT DONE
+	$(MAKE) -C src/$@ OBJDIR=$(OBJDIR)/$@
 
 # 构建 mybash（可执行文件，依赖上面的库）
 mybash: $(SUBDIRS)
-	# TODO: 在这里添加你的代码
-    # I AM NOT DONE
+	$(MAKE) -C src/mybash BINDIR=$(BINDIR) OBJDIR=$(OBJDIR)/mybash
 
 # 清理所有生成的文件
 clean:
-    # TODO: 在这里添加你的代码
-    # I AM NOT DONE
+	rm -rf $(OBJDIR) $(BINDIR)
 
 .PHONY: all $(SUBDIRS) mybash clean

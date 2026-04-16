@@ -16,7 +16,21 @@ int n;
 
 int binary_search(const char *target_name) {
     // TODO: 在这里添加你的代码
-    // I AM NOT DONE
+    int left=0,right=n-1;
+    int mid = left + (right - left) / 2;
+    int cmp = strcmp(students[mid].name, target_name);
+    if (cmp == 0) {
+        // 找到了匹配的学生，返回其在数组中的索引
+        return mid; 
+    } else if (cmp < 0) {
+        // 中间的名字字典序小于目标名字 (例如: "Alice" < "David")
+        // 说明目标在右半部分，所以调整左边界
+        left = mid + 1;
+    } else {
+        // 中间的名字字典序大于目标名字 (例如: "Zack" > "David")
+        // 说明目标在左半部分，所以调整右边界
+        right = mid - 1;
+    }
 }
 
 int main(void) {

@@ -11,11 +11,35 @@ typedef struct {
 } Student;
 
 Student students[MAX_STUDENTS];
+  int paritition(int left, int right) { // 划分函数，引入随机化策略
+    int k = left + rand() % (right - left + 1); // 生成 [left, right] 区间的随机数
 
-void quick_sort(int left, int right) {
-    // TODO: 在这里添加你的代码
-    // I AM NOT DONE
+    Student temp= students[k];
+    students[k]=students[left];
+    students[left]=temp;
+
+    int i = left, j = right;
+    Student pivot =  students[left];
+    while (i < j) {
+        while ( students[j].score <pivot.score && i < j) j--; // 找右侧大于或等于 pivot 的数
+        if (i < j)
+        students[i++] =  students[j]; // 覆盖
+        while ( students[i].score > pivot.score && i < j) i++; // 找左侧小于或等于 pivot 的数
+        if (i < j)
+        students[j--] =  students[i]; // 覆盖
+    }
+    students[i] = pivot; // 放到中间
+    return i;
 }
+
+ 
+void quick_sort(int left, int right)  {
+    if (left< right) {
+      int pivot = paritition(left,right);
+      quick_sort( left, pivot - 1);
+      quick_sort( pivot + 1, right);
+    }
+  }
 
 int main(void) {
     FILE *file = fopen("03_students.txt", "r");

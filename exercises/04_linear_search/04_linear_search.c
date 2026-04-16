@@ -14,7 +14,14 @@ Student students[MAX_STUDENTS];
 int n;
 int linear_search(const char *target_name) {
     // TODO: 在这里添加你的代码
-    // I AM NOT DONE
+    int i=0;
+   while(i<n) {
+       if(strcmp(students[i].name, target_name) == 0)
+        return i;
+  //  printf("i:%d ,%s,%s\n",i,target_name,students[i].name);
+       i++;
+   }
+   return -1;
 }
 
 int main(void) {

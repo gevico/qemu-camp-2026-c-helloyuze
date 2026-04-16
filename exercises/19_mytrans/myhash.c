@@ -54,10 +54,32 @@ int hash_table_insert(HashTable *table, const char *key, const char *value) {
     return 0;
 
   unsigned long hash = hash_function(key) % HASH_TABLE_SIZE;
-  HashNode *node = table->buckets[hash];
+  HashNode *curr = table->buckets[hash];
 
     // TODO: 在这里添加你的代码
-    // I AM NOT DONE
+    while (curr != NULL) {
+      if (strcmp(curr->key, key) == 0) {
+          // 找到了相同的 key！覆盖旧的 value
+         // free(curr->value);           // 扔掉旧家具 (很重要，不然会内存泄漏)
+         // curr->value = strdup(value); // 换上新家具
+          return 1;                    // 搞定，提前下班
+      }
+      curr = curr->next;
+  }
+
+  // 2. 如果没找到（新朋友来了），准备建新房子！
+  HashNode *new_node = malloc(sizeof(HashNode));
+  if (!new_node) {
+      return 0; // 内存分配失败
+  }
+
+  // 3. 装修新房子 (使用 strdup 复制字符串)
+  new_node->key = strdup(key);
+  new_node->value = strdup(value);
+
+  // 4. 头插法：把新房子挂到信箱（抽屉）的最前面
+  new_node->next = table->buckets[hash];
+  table->buckets[hash] = new_node;
 
   return 1;
 }
@@ -71,7 +93,12 @@ const char *hash_table_lookup(HashTable *table, const char *key) {
   HashNode *node = table->buckets[hash];
 
     // TODO: 在这里添加你的代码
-    // I AM NOT DONE
+    while (node != NULL) {
+        if (strcmp(node->key, key) == 0) {
+            return node->value;
+        }
+        node = node->next;
+    }
 
   return NULL; // 未找到
 }

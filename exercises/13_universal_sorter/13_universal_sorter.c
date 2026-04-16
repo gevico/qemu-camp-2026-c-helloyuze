@@ -40,13 +40,57 @@ void processFile(const char *filename) {
     printf("=== 处理数据来自: %s ===\n", filename);
 
     switch (choice) {
-        // TODO: 在这里添加你的代码
-        // I AM NOT DONE
+       case 1:{
+          int* arr =(int*) malloc(n*sizeof(int));
+          for(int i=0;i<n;i++)
+          if(fscanf(fin,"%d",&arr[i])!=1)
+          {
+           free(arr);
+           fclose(fin);
+           return;
+          }
+          sort(arr, n, sizeof(int), compareInt);
+            for (int i = 0; i < n; i++) {
+                printf("%d ", arr[i]);
+            }
+            printf("\n");
+            free(arr);
+
+
+
+       }
+
+       case 2:{
+        float* arr =(float*) malloc(n*sizeof(float));
+        for(int i=0;i<n;i++)
+        if(fscanf(fin,"%f",&arr[i])!=1)
+        {
+         free(arr);
+         fclose(fin);
+         return;
+        }
+        sort(arr, n, sizeof(float), compareFloat);
+          for (int i = 0; i < n; i++) {
+              printf("%.2f ", arr[i]);
+          }
+          printf("\n");
+          free(arr);
+
+
+
+     }
+
+
+    
     }
 
-    fclose(fin);
-}
 
+
+
+
+
+
+}
 int main() {
     processFile("int_sort.txt");
     processFile("float_sort.txt");

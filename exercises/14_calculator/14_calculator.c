@@ -3,21 +3,38 @@
 // TODO：定义四则运算规则
 // hint：似乎除数有一些特殊情况，需要处理
 
-// I AM NOT DONE
-int add(int a, int b) {  }
-int subtract(int a, int b) {  }
-int multiply(int a, int b) {  }
-int divide(int a, int b) {  }
+
+int add(int a, int b) { 
+    return a+b ;
+ }
+int subtract(int a, int b) {  return a-b ;}
+int multiply(int a, int b) {return a*b ;  }
+int divide(int a, int b) {
+    if (b == 0) {
+       printf("错误：除数不能为0\n");
+        return 0;
+    }
+    return a / b;
+}
 
 
 
+/**
+ * @brief 计算器程序的主函数
+ *
+ * 该函数实现了一个简单的命令行计算器，支持加、减、乘、除四种基本运算。
+ * 用户输入两个整数和一个运算符，程序通过函数指针数组调用相应的运算函数，
+ * 并输出计算结果。
+ *
+ * @return int 程序退出状态码，0表示正常退出，1表示遇到错误（如无效运算符）
+ */
 int main() {
     int a, b;
     char op;
 
     // TODO
     // hint:这是一个函数指针数组，在这之前应该先定义指针
-    int ()() = {add, subtract, multiply, divide};
+    int (*operations[])(int, int)= {add, subtract, multiply, divide};
 
     char operators[] = "+-*/";
 

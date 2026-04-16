@@ -1,7 +1,8 @@
 # src/mybash/Makefile
 
 CC = gcc
-CFLAGS = -Wall -I../../include
+CFLAGS = -Wall -I../../include -fPIE
+LDFLAGS = -pie
 
 # 可执行文件名
 TARGET := mybash
@@ -21,8 +22,17 @@ TARGET_PATH := $(BINDIR)/$(TARGET)
 
 all: $(TARGET_PATH)
 
-# TODO: 在这里添加你的代码
-# I AM NOT DONE
+$(OBJDIR):
+	mkdir -p $(OBJDIR)
+
+$(BINDIR):
+	mkdir -p $(BINDIR)
+
+$(OBJDIR)/%.o: %.c | $(OBJDIR)
+	$(CC) $(CFLAGS) -c -o $@ $<
+
+$(TARGET_PATH): $(OBJS) | $(BINDIR)
+	$(CC) $(LDFLAGS) $(CFLAGS) -o $@ $(OBJS) $(LINKLIBS) -lmysed -lmywc -lmytrans -lmyfile
 
 clean:
 	@rm -rf $(OBJDIR)/*.o $(TARGET_PATH)

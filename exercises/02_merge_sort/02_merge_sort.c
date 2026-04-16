@@ -12,10 +12,40 @@ typedef struct {
 
 Student students[MAX_STUDENTS];
 Student temp[MAX_STUDENTS];
+void merge(int start, int mid, int end)
+{
+	int n1 = mid - start + 1;
+	int n2 = end - mid;
+	Student left[n1], right[n2];
+	int i, j, k;
 
+	for (i = 0; i < n1; i++) /* left holds a[start..mid] */
+		left[i] = students[start+i];
+	for (j = 0; j < n2; j++) /* right holds a[mid+1..end] */
+		right[j] = students[mid+1+j];
+
+	i = j = 0;
+	k = start;
+    while(i<n1&&j<n2)
+    {
+        if(left[i].score<right[j].score)
+        students[k++]=right[j++];
+    else  
+    students[k++]=left[i++];
+    }
+    while(i<n1)
+    students[k++]=left[i++];
+    while(j<n2)
+    students[k++]=right[j++];
+}
 void merge_sort(int left, int right) {
     // TODO: 在这里添加你的代码
-    // I AM NOT DONE
+    if (left < right) {
+   int mid=(left+right)/2;
+   merge_sort(left,mid);
+   merge_sort(mid+1,right);
+   merge(left, mid,  right);}
+   
 }
 
 int main(void) {
