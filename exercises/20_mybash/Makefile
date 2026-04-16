@@ -23,11 +23,11 @@ all: mybash
 
 # 通用规则：构建每个子模块（静态库）
 $(SUBDIRS):
-	$(MAKE) -C src/$@ OBJDIR=$(OBJDIR)/$@
+	@$(MAKE) -s -C src/$@ OBJDIR=$(OBJDIR)/$@
 
 # 构建 mybash（可执行文件，依赖上面的库）
 mybash: $(SUBDIRS)
-	$(MAKE) -C src/mybash BINDIR=$(BINDIR) OBJDIR=$(OBJDIR)/mybash
+	@$(MAKE) -s -C src/mybash BINDIR=$(BINDIR) OBJDIR=$(OBJDIR)/mybash
 
 # 清理所有生成的文件
 clean:
