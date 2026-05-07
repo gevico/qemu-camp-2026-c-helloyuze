@@ -18,10 +18,25 @@ typedef struct {
     int size;
 } HashTable;
 
+static char *dup_string(const char *str) {
+    size_t len = strlen(str);
+    char *copy = malloc(len + 1);
+    if (copy == NULL) {
+        return NULL;
+    }
+    memcpy(copy, str, len + 1);
+    return copy;
+}
+
 // djb2哈希函数
 unsigned long djb2_hash(const char *str) {
-    // TODO: 在这里添加你的代码
-    // I AM NOT DONE
+    unsigned long hash = 5381;
+    int c;
+
+    while ((c = (unsigned char)*str++) != '\0') {
+        hash = ((hash << 5) + hash) + (unsigned char)c;
+    }
+    return hash;
 }
 
 // 创建哈希表
@@ -36,14 +51,35 @@ HashTable *create_hash_table(int size) {
 void hash_table_insert(HashTable *ht, const char *word) {
     unsigned long hash = djb2_hash(word) % ht->size;
 
-    // TODO: 在这里添加你的代码
-    // I AM NOT DONE
+    for (HashNode *node = ht->table[hash]; node != NULL; node = node->next) {
+        if (strcmp(node->word, word) == 0) {
+            node->count++;
+            return;
+        }
+    }
+
+    HashNode *node = malloc(sizeof(*node));
+    if (node == NULL) {
+        return;
+    }
+    node->word = dup_string(word);
+    if (node->word == NULL) {
+        free(node);
+        return;
+    }
+    node->count = 1;
+    node->next = ht->table[hash];
+    ht->table[hash] = node;
 }
 
 // 从哈希表中获取所有单词及其计数
 void get_all_words(HashTable *ht, HashNode **nodes, int *count) {
-    // TODO: 在这里添加你的代码
-    // I AM NOT DONE
+    *count = 0;
+    for (int i = 0; i < ht->size; i++) {
+        for (HashNode *node = ht->table[i]; node != NULL; node = node->next) {
+            nodes[(*count)++] = node;
+        }
+    }
 }
 
 // 比较函数用于排序
@@ -52,8 +88,10 @@ int compare_nodes(const void *a, const void *b) {
     HashNode *node_b = *(HashNode **)b;
     
     // 先按计数降序，再按字母升序
-    // TODO: 在这里添加你的代码
-    // I AM NOT DONE
+    if (node_a->count != node_b->count) {
+        return node_b->count - node_a->count;
+    }
+    return strcmp(node_a->word, node_b->word);
 }
 
 // 释放哈希表内存
@@ -73,8 +111,32 @@ void free_hash_table(HashTable *ht) {
 
 // 从字符串中获取下一个单词
 char *get_next_word(const char **text) {
-    // TODO: 在这里添加你的代码
-    // I AM NOT DONE
+    const char *p = *text;
+    while (*p != '\0' && !isalpha((unsigned char)*p)) {
+        p++;
+    }
+    if (*p == '\0') {
+        *text = p;
+        return NULL;
+    }
+
+    const char *start = p;
+    while (*p != '\0' && isalpha((unsigned char)*p)) {
+        p++;
+    }
+
+    size_t len = (size_t)(p - start);
+    char *word = malloc(len + 1);
+    if (word == NULL) {
+        *text = p;
+        return NULL;
+    }
+    for (size_t i = 0; i < len; ++i) {
+        word[i] = (char)tolower((unsigned char)start[i]);
+    }
+    word[len] = '\0';
+    *text = p;
+    return word;
 }
 
 int main(int argc, char *argv[]) {
